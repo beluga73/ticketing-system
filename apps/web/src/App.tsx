@@ -1,0 +1,3 @@
+export default function App() {
+	return <div className="bg-gray-300">App</div>;
+}
