@@ -17,6 +17,7 @@ const prismaMock = {
 			...data,
 		})),
 	},
+	refreshToken: { create: vi.fn(async () => ({})) },
 };
 
 describe("Auth (e2e)", () => {
@@ -51,10 +52,14 @@ describe("Auth (e2e)", () => {
 			.expect(201)
 			.expect(({ body }) => {
 				expect(body).toEqual({
-					id: expect.any(String),
-					fullName: "Ann Lee",
-					email: "ann@example.com",
+					user: {
+						id: expect.any(String),
+						fullName: "Ann Lee",
+						email: "ann@example.com",
+					},
+					accessToken: expect.any(String),
 				});
+				expect(body.user).not.toHaveProperty("passwordHash");
 			});
 	});
 
