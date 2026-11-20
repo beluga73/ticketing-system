@@ -16,24 +16,32 @@ export class AuthService {
 		private readonly tokens: TokenService,
 	) {}
 
-	async signUp({ password, ...rest }: SignUpRequestDto) {
-		const passwordHash = await this.passwordHasher.hash(password);
-		const user = await this.users.create({ ...rest, passwordHash });
-		const { accessToken } = await this.tokens.issue(user.id);
+	private async createTokens(
+		userId: string,
+	): Promise<{ accessToken: string; refreshToken: string }> {
+		const { accessToken } = await this.tokens.issue(userId);
 		const refreshToken = randomBytes(32).toString("base64url");
-
 		const tokenHash = createHash("sha256").update(refreshToken).digest("hex");
 		const expiresAt = new Date(Date.now() + REFRESH_TTL_MS);
 
 		await this.prisma.refreshToken.create({
 			data: {
 				tokenHash,
-				userId: user.id,
+				userId,
 				expiresAt,
 			},
 		});
 
-		return { user, accessToken, refreshToken };
+		return { accessToken, refreshToken };
+	}
+
+	async signUp({ password, ...rest }: SignUpRequestDto) {
+		const passwordHash = await this.passwordHasher.hash(password);
+		const user = await this.users.create({ ...rest, passwordHash });
+
+		const tokens = await this.createTokens(user.id);
+
+		return { user, ...tokens };
 	}
 
 	async signIn(dto: SignInRequestDto) {
@@ -43,8 +51,10 @@ export class AuthService {
 			dto.password,
 			user?.passwordHash,
 		);
-		if (!valid) throw new UnauthorizedException("Invalid credentials");
+		if (!user || !valid) throw new UnauthorizedException("Invalid credentials");
 
-		return user;
+		const tokens = await this.createTokens(user.id);
+
+		return { user, ...tokens };
 	}
 }

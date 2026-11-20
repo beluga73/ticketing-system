@@ -50,8 +50,24 @@ export class AuthController {
 	@HttpCode(200)
 	async signIn(
 		@Body({ schema: signInRequestSchema }) dto: SignInRequestDto,
+		@Res({ passthrough: true }) res: Response,
 	): Promise<SignInResponseDto> {
-		const user = await this.authService.signIn(dto);
-		return signInResponseSchema.parse(user);
+		const { user, accessToken, refreshToken } =
+			await this.authService.signIn(dto);
+
+		this.adapterHost.httpAdapter.setCookie?.(
+			res,
+			"refresh_token",
+			refreshToken,
+			{
+				httpOnly: true,
+				secure: true,
+				sameSite: "lax",
+				path: "/api/auth/refresh",
+				maxAge: REFRESH_TTL_MS / 1000,
+			},
+		);
+
+		return signInResponseSchema.parse({ user, accessToken });
 	}
 }

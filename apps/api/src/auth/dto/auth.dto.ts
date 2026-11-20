@@ -13,10 +13,8 @@ export const signUpResponseSchema = z.object({
 });
 export type SignUpResponseDto = z.infer<typeof signUpResponseSchema>;
 
-export const signInRequestSchema = userSchema
-	.pick({ email: true })
-	.extend({ password: z.string() });
+export const signInRequestSchema = signUpRequestSchema.omit({ fullName: true });
 export type SignInRequestDto = z.infer<typeof signInRequestSchema>;
 
-export const signInResponseSchema = userSchema;
+export const signInResponseSchema = signUpResponseSchema;
 export type SignInResponseDto = z.infer<typeof signInResponseSchema>;
