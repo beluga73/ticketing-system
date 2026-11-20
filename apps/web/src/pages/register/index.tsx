@@ -60,9 +60,13 @@ export default function Register() {
 	});
 
 	const onSubmit = async (values: FormValues) => {
-		const url = buildUrl("/register");
+		const url = buildUrl("/auth/register");
 		try {
 			const res = await fetch(url, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
 				body: JSON.stringify({
 					fullName: values.fullName,
 					email: values.email,
@@ -70,7 +74,7 @@ export default function Register() {
 				}),
 			});
 			const data = await res.json();
-			// accessToken, refreshToken
+			console.log(data);
 		} catch (err) {
 			console.log(err);
 		}

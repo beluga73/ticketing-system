@@ -1,4 +1,2 @@
-export const buildUrl = (url: string) => {
-	const newUrl = new URL(url, import.meta.env.BASE_URL);
-	return newUrl.toString();
-};
+export const buildUrl = (url: string) =>
+	`${import.meta.env.VITE_API_URL}${url}`;
