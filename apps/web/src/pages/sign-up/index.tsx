@@ -44,7 +44,7 @@ type FormValues = z.infer<typeof formSchema>;
 const fieldClass =
 	"h-11 border-foreground/25 bg-secondary px-3.5 dark:bg-secondary";
 
-export default function Register() {
+export default function SignUp() {
 	const [showPassword, setShowPassword] = useState(false);
 
 	const form = useForm<FormValues>({
@@ -60,7 +60,7 @@ export default function Register() {
 	});
 
 	const onSubmit = async (values: FormValues) => {
-		const url = buildUrl("/auth/register");
+		const url = buildUrl("/auth/sign-up");
 		try {
 			const res = await fetch(url, {
 				method: "POST",
@@ -98,19 +98,19 @@ export default function Register() {
 							</p>
 						</div>
 
-						<form id="register-form" onSubmit={form.handleSubmit(onSubmit)}>
+						<form id="sign-up-form" onSubmit={form.handleSubmit(onSubmit)}>
 							<FieldGroup className="gap-5">
 								<Controller
 									name="fullName"
 									control={form.control}
 									render={({ field, fieldState }) => (
 										<Field data-invalid={fieldState.invalid}>
-											<FieldLabel htmlFor="register-full-name">
+											<FieldLabel htmlFor="sign-up-full-name">
 												Full name
 											</FieldLabel>
 											<Input
 												{...field}
-												id="register-full-name"
+												id="sign-up-full-name"
 												className={fieldClass}
 												autoComplete="name"
 												aria-invalid={fieldState.invalid}
@@ -127,10 +127,10 @@ export default function Register() {
 									control={form.control}
 									render={({ field, fieldState }) => (
 										<Field data-invalid={fieldState.invalid}>
-											<FieldLabel htmlFor="register-email">Email</FieldLabel>
+											<FieldLabel htmlFor="sign-up-email">Email</FieldLabel>
 											<Input
 												{...field}
-												id="register-email"
+												id="sign-up-email"
 												type="email"
 												className={fieldClass}
 												placeholder="you@example.com"
@@ -149,13 +149,13 @@ export default function Register() {
 									control={form.control}
 									render={({ field, fieldState }) => (
 										<Field data-invalid={fieldState.invalid}>
-											<FieldLabel htmlFor="register-password">
+											<FieldLabel htmlFor="sign-up-password">
 												Password
 											</FieldLabel>
 											<InputGroup className="h-11 border-foreground/25 bg-secondary dark:bg-secondary">
 												<InputGroupInput
 													{...field}
-													id="register-password"
+													id="sign-up-password"
 													type={showPassword ? "text" : "password"}
 													className="h-full px-3.5"
 													autoComplete="new-password"
@@ -188,12 +188,12 @@ export default function Register() {
 									control={form.control}
 									render={({ field, fieldState }) => (
 										<Field data-invalid={fieldState.invalid}>
-											<FieldLabel htmlFor="register-confirm-password">
+											<FieldLabel htmlFor="sign-up-confirm-password">
 												Confirm password
 											</FieldLabel>
 											<Input
 												{...field}
-												id="register-confirm-password"
+												id="sign-up-confirm-password"
 												type={showPassword ? "text" : "password"}
 												className={fieldClass}
 												autoComplete="new-password"
@@ -215,14 +215,14 @@ export default function Register() {
 											data-invalid={fieldState.invalid}
 										>
 											<Checkbox
-												id="register-terms"
+												id="sign-up-terms"
 												checked={field.value}
 												onCheckedChange={field.onChange}
 												onBlur={field.onBlur}
 												aria-invalid={fieldState.invalid}
 											/>
 											<FieldLabel
-												htmlFor="register-terms"
+												htmlFor="sign-up-terms"
 												className="font-normal text-muted-foreground"
 											>
 												I agree to the terms of sale and the privacy policy.
@@ -240,7 +240,7 @@ export default function Register() {
 						<p className="mt-8 text-center text-sm text-muted-foreground">
 							Already have an account?{" "}
 							<Link
-								to="/login"
+								to="/sign-in"
 								className="font-semibold text-primary underline underline-offset-4"
 							>
 								Log in

@@ -1,24 +1,24 @@
 import * as z from "zod";
 
-export const registerRequestSchema = z.object({
+export const signUpRequestSchema = z.object({
 	fullName: z.string().min(2).optional(),
 	email: z.email(),
 	password: z.string().min(8),
 });
-export type RegisterRequestDto = z.infer<typeof registerRequestSchema>;
+export type SignUpRequestDto = z.infer<typeof signUpRequestSchema>;
 
-export const registerResponseSchema = z.object({
+export const signUpResponseSchema = z.object({
 	id: z.uuid(),
 	email: z.email(),
 	fullName: z.string().nullable(),
 });
-export type RegisterResponseDto = z.infer<typeof registerResponseSchema>;
+export type SignUpResponseDto = z.infer<typeof signUpResponseSchema>;
 
-export const loginRequestSchema = z.object({
+export const signInRequestSchema = z.object({
 	email: z.email(),
 	password: z.string().min(8),
 });
-export type LoginRequestDto = z.infer<typeof loginRequestSchema>;
+export type SignInRequestDto = z.infer<typeof signInRequestSchema>;
 
-export const loginResponseSchema = registerResponseSchema;
-export type LoginResponseDto = z.infer<typeof loginResponseSchema>;
+export const signInResponseSchema = signUpResponseSchema;
+export type SignInResponseDto = z.infer<typeof signInResponseSchema>;

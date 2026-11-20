@@ -1,33 +1,33 @@
 import { Body, Controller, Post } from "@nestjs/common";
 import { AuthService } from "./auth.service.js";
 import {
-	type LoginRequestDto,
-	type LoginResponseDto,
-	loginRequestSchema,
-	loginResponseSchema,
-	type RegisterRequestDto,
-	type RegisterResponseDto,
-	registerRequestSchema,
-	registerResponseSchema,
+	type SignInRequestDto,
+	type SignInResponseDto,
+	type SignUpRequestDto,
+	type SignUpResponseDto,
+	signInRequestSchema,
+	signInResponseSchema,
+	signUpRequestSchema,
+	signUpResponseSchema,
 } from "./dto/auth.dto.js";
 
 @Controller("auth")
 export class AuthController {
 	constructor(private readonly authService: AuthService) {}
 
-	@Post("register")
-	async register(
-		@Body({ schema: registerRequestSchema }) dto: RegisterRequestDto,
-	): Promise<RegisterResponseDto> {
-		const user = await this.authService.register(dto);
-		return registerResponseSchema.parse(user);
+	@Post("sign-up")
+	async signUp(
+		@Body({ schema: signUpRequestSchema }) dto: SignUpRequestDto,
+	): Promise<SignUpResponseDto> {
+		const user = await this.authService.signUp(dto);
+		return signUpResponseSchema.parse(user);
 	}
 
-	@Post("login")
-	async login(
-		@Body({ schema: loginRequestSchema }) dto: LoginRequestDto,
-	): Promise<LoginResponseDto> {
-		const user = await this.authService.login(dto);
-		return loginResponseSchema.parse(user);
+	@Post("sign-in")
+	async signIn(
+		@Body({ schema: signInRequestSchema }) dto: SignInRequestDto,
+	): Promise<SignInResponseDto> {
+		const user = await this.authService.signIn(dto);
+		return signInResponseSchema.parse(user);
 	}
 }

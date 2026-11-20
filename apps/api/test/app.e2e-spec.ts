@@ -40,9 +40,9 @@ describe("Auth (e2e)", () => {
 		await app.close();
 	});
 
-	it("POST /api/auth/register creates a user", () => {
+	it("POST /api/auth/sign-up creates a user", () => {
 		return request(app.getHttpServer())
-			.post("/api/auth/register")
+			.post("/api/auth/sign-up")
 			.send({
 				fullName: "Ann Lee",
 				email: "ann@example.com",
@@ -58,9 +58,9 @@ describe("Auth (e2e)", () => {
 			});
 	});
 
-	it("POST /api/auth/register rejects an invalid body", () => {
+	it("POST /api/auth/sign-up rejects an invalid body", () => {
 		return request(app.getHttpServer())
-			.post("/api/auth/register")
+			.post("/api/auth/sign-up")
 			.send({ fullName: "A", email: "nope", password: "123" })
 			.expect(400);
 	});
