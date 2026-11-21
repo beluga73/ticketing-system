@@ -24,6 +24,7 @@ import {
 	InputGroupInput,
 } from "@/components/ui/input-group";
 import { api } from "@/lib/api";
+import { getApiError } from "@/lib/api-error";
 import { useAuth } from "@/stores/auth-store";
 
 const formSchema = z
@@ -64,6 +65,7 @@ export default function SignUp() {
 	});
 
 	const onSubmit = async (values: FormValues) => {
+		form.clearErrors("root");
 		try {
 			const body: SignUpRequestDto = {
 				fullName: values.fullName || undefined,
@@ -74,7 +76,14 @@ export default function SignUp() {
 			setAuth(data.user, data.accessToken);
 			navigate("/");
 		} catch (err) {
-			console.log(err);
+			const { status, message } = getApiError(err);
+			if (status === 409) {
+				form.setError("email", {
+					message: "This email is already registered.",
+				});
+			} else {
+				form.setError("root.server", { message });
+			}
 		}
 	};
 
@@ -228,6 +237,10 @@ export default function SignUp() {
 										</Field>
 									)}
 								/>
+
+								{form.formState.errors.root?.server && (
+									<FieldError errors={[form.formState.errors.root.server]} />
+								)}
 
 								<Button type="submit" size="lg" className="h-11 w-full text-sm">
 									Create account

@@ -14,7 +14,10 @@ export const signUpResponseSchema = z.object({
 export type SignUpResponseDto = z.infer<typeof signUpResponseSchema>;
 
 // SignIn
-export const signInRequestSchema = signUpRequestSchema.omit({ fullName: true });
+export const signInRequestSchema = z.object({
+	email: z.email(),
+	password: z.string(),
+});
 export type SignInRequestDto = z.infer<typeof signInRequestSchema>;
 export const signInResponseSchema = signUpResponseSchema;
 export type SignInResponseDto = z.infer<typeof signInResponseSchema>;

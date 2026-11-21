@@ -1,13 +1,5 @@
 import { Public } from "@nestjs/authentication";
-import {
-	Body,
-	Controller,
-	Cookies,
-	Headers,
-	HttpCode,
-	Post,
-	Res,
-} from "@nestjs/common";
+import { Body, Controller, Cookies, HttpCode, Post, Res } from "@nestjs/common";
 
 import { HttpAdapterHost } from "@nestjs/core";
 import {
