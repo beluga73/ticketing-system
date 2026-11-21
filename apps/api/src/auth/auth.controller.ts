@@ -1,9 +1,20 @@
 import { Public } from "@nestjs/authentication";
-import { Body, Controller, HttpCode, Post, Res } from "@nestjs/common";
+import {
+	Body,
+	Controller,
+	Cookies,
+	Headers,
+	HttpCode,
+	Post,
+	Res,
+} from "@nestjs/common";
+
 import { HttpAdapterHost } from "@nestjs/core";
 import type { Response } from "express";
 import { AuthService, REFRESH_TTL_MS } from "./auth.service.js";
 import {
+	RefreshResponseDto,
+	refreshResponseSchema,
 	type SignInRequestDto,
 	type SignInResponseDto,
 	type SignUpRequestDto,
@@ -22,6 +33,7 @@ export class AuthController {
 		private readonly adapterHost: HttpAdapterHost,
 	) {}
 
+	@Public()
 	@Post("sign-up")
 	async signUp(
 		@Body({ schema: signUpRequestSchema }) dto: SignUpRequestDto,
@@ -46,6 +58,7 @@ export class AuthController {
 		return signUpResponseSchema.parse({ user, accessToken });
 	}
 
+	@Public()
 	@Post("sign-in")
 	@HttpCode(200)
 	async signIn(
@@ -69,5 +82,16 @@ export class AuthController {
 		);
 
 		return signInResponseSchema.parse({ user, accessToken });
+	}
+
+	@Public()
+	@Post("refresh")
+	@HttpCode(200)
+	async refresh(
+		@Cookies("refresh_token") refreshToken: string,
+	): Promise<RefreshResponseDto> {
+		const data = await this.authService.refresh(refreshToken);
+
+		return refreshResponseSchema.parse(data);
 	}
 }

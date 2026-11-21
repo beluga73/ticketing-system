@@ -23,10 +23,11 @@ import {
 	InputGroupInput,
 } from "@/components/ui/input-group";
 import { buildUrl } from "@/lib/api";
+import { useAuth } from "@/stores/auth-store";
 
 const formSchema = z
 	.object({
-		fullName: z.string().min(2, "Enter your full name."),
+		fullName: z.string().min(2, "Enter your full name.").or(z.literal("")),
 		email: z.email("Enter a valid email address."),
 		password: z.string().min(8, "Use at least 8 characters."),
 		confirmPassword: z.string(),
@@ -46,6 +47,7 @@ const fieldClass =
 
 export default function SignUp() {
 	const [showPassword, setShowPassword] = useState(false);
+	const setAuth = useAuth((state) => state.setAuth);
 
 	const form = useForm<FormValues>({
 		resolver: zodResolver(formSchema),
@@ -64,17 +66,18 @@ export default function SignUp() {
 		try {
 			const res = await fetch(url, {
 				method: "POST",
+				credentials: "include",
 				headers: {
 					"Content-Type": "application/json",
 				},
 				body: JSON.stringify({
-					fullName: values.fullName,
+					fullName: values.fullName || undefined,
 					email: values.email,
 					password: values.password,
 				}),
 			});
 			const data = await res.json();
-			console.log(data);
+			setAuth(data.user, data.accessToken);
 		} catch (err) {
 			console.log(err);
 		}
