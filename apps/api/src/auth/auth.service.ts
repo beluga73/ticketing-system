@@ -6,9 +6,9 @@ import {
 	Injectable,
 	UnauthorizedException,
 } from "@nestjs/common";
+import type { SignInRequestDto, SignUpRequestDto } from "@repo/shared";
 import { PrismaService } from "@/prisma/prisma.service.js";
 import { UsersService } from "@/users/users.service.js";
-import type { SignInRequestDto, SignUpRequestDto } from "./dto/auth.dto.js";
 
 export const REFRESH_TTL_MS = 14 * 24 * 60 * 60 * 1000; // 14 days
 

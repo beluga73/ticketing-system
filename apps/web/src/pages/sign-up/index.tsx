@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { SignUpRequestDto, SignUpResponseDto } from "@repo/shared";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -22,7 +23,7 @@ import {
 	InputGroupButton,
 	InputGroupInput,
 } from "@/components/ui/input-group";
-import { buildUrl } from "@/lib/api";
+import { api } from "@/lib/api";
 import { useAuth } from "@/stores/auth-store";
 
 const formSchema = z
@@ -62,21 +63,14 @@ export default function SignUp() {
 	});
 
 	const onSubmit = async (values: FormValues) => {
-		const url = buildUrl("/auth/sign-up");
 		try {
-			const res = await fetch(url, {
-				method: "POST",
-				credentials: "include",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					fullName: values.fullName || undefined,
-					email: values.email,
-					password: values.password,
-				}),
-			});
-			const data = await res.json();
+			const body: SignUpRequestDto = {
+				fullName: values.fullName || undefined,
+				email: values.email,
+				password: values.password,
+			};
+			const { data } = await api.post<SignUpResponseDto>("/auth/sign-up", body);
+
 			setAuth(data.user, data.accessToken);
 		} catch (err) {
 			console.log(err);

@@ -1,7 +1,7 @@
 import { ConflictException, Injectable } from "@nestjs/common";
+import { UserDto } from "@repo/shared";
 import { Prisma } from "@/generated/prisma/client.js";
 import { PrismaService } from "@/prisma/prisma.service.js";
-import { UserDto } from "./dto/user.dto.js";
 
 type CreateUserInput = Pick<
 	Prisma.UserCreateInput,

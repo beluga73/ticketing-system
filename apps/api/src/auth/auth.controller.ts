@@ -10,8 +10,6 @@ import {
 } from "@nestjs/common";
 
 import { HttpAdapterHost } from "@nestjs/core";
-import type { Response } from "express";
-import { AuthService, REFRESH_TTL_MS } from "./auth.service.js";
 import {
 	RefreshResponseDto,
 	refreshResponseSchema,
@@ -23,7 +21,9 @@ import {
 	signInResponseSchema,
 	signUpRequestSchema,
 	signUpResponseSchema,
-} from "./dto/auth.dto.js";
+} from "@repo/shared";
+import type { Response } from "express";
+import { AuthService, REFRESH_TTL_MS } from "./auth.service.js";
 
 @Public()
 @Controller("auth")

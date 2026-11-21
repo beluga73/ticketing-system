@@ -1,19 +1,14 @@
+import type { UserDto } from "@repo/shared";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-type User = {
-	id: string;
-	email: string;
-	fullName?: string;
-};
-
 type AuthState = {
-	user: User | null;
+	user: UserDto | null;
 	accessToken: string | null;
 };
 
 type AuthAction = {
-	setAuth: (user: User, accessToken: string) => void;
+	setAuth: (user: UserDto, accessToken: string) => void;
 	setAccessToken: (accessToken: string) => void;
 	clear: () => void;
 };

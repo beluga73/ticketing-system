@@ -1,5 +1,5 @@
 import * as z from "zod";
-import { userSchema } from "@/users/dto/user.dto.js";
+import { userSchema } from "./user.js";
 
 // SignUp
 export const signUpRequestSchema = userSchema
