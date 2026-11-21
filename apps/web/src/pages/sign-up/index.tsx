@@ -3,7 +3,7 @@ import type { SignUpRequestDto, SignUpResponseDto } from "@repo/shared";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import * as z from "zod";
 import { BrandPanel } from "@/components/brand-panel";
 import { Logo } from "@/components/logo";
@@ -47,6 +47,7 @@ const fieldClass =
 	"h-11 border-foreground/25 bg-secondary px-3.5 dark:bg-secondary";
 
 export default function SignUp() {
+	const navigate = useNavigate();
 	const [showPassword, setShowPassword] = useState(false);
 	const setAuth = useAuth((state) => state.setAuth);
 
@@ -70,8 +71,8 @@ export default function SignUp() {
 				password: values.password,
 			};
 			const { data } = await api.post<SignUpResponseDto>("/auth/sign-up", body);
-
 			setAuth(data.user, data.accessToken);
+			navigate("/");
 		} catch (err) {
 			console.log(err);
 		}
